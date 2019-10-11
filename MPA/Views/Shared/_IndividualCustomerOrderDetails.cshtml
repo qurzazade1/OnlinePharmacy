@@ -1,0 +1,105 @@
+﻿@model OnlinePharmacy.Models.ViewModels.CustomerOrderDetailsViewModel
+@using OnlinePharmacy.WebShopUtility
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+<form asp-action="OrderDelivery" asp-controller="CustomerOrder" asp-route-orderId="@Model.CustomerOrderHeader.Id" method="post">
+    <div class="container row border ml-1 backgroundghostWhiteBorder10Padding" style="width:100%">
+
+        <div class="col-lg-4 col-12">
+            <h3 class="d-flex justify-content-between align-content-start mb-3">
+                
+                <span  style="width:100%;height:100%;" class="badge badge-success ">Order ID:  @Model.CustomerOrderHeader.Id</span>
+            </h3>
+            <ul class="list-group mb-3">
+                @foreach (var details in Model.CustomerOrderDetails)
+                {
+                    <li class="list-group-item d-flex justify-content-between">
+                        <div>
+                            <h6 class="my-0">@details.Name</h6>
+                            <small class="text-muted">Quantity : @details.Count</small>
+                        </div>
+                        <span class="text-muted">@(details.Price * details.Count)</span>
+                    </li>
+                }
+                @if (Model.CustomerOrderHeader.DiscountCodeString != null)
+                {
+                    <li class="list-group-item d-flex justify-content-between">
+                        <div class="text-success">
+                            <h6 class="my-0">Promo Code</h6>
+                            <small>@Model.CustomerOrderHeader.DiscountCodeString</small>
+                        </div>
+                        <span class="text-success">@(Model.CustomerOrderHeader.OrderTotalOriginal - Model.CustomerOrderHeader.OrderTotal)</span>
+                    </li>
+                }
+                <li class="list-group-item d-flex justify-content-between bg-light">
+                    <span class="text-info"> Total (USD)</span>
+                    <strong class="text-info">$@Model.CustomerOrderHeader.OrderTotal</strong>
+                </li>
+            </ul>
+            @if (Model.CustomerOrderHeader.Status.Equals(SD.StatusReady) && (User.IsInRole(SD.ManagerUser) || User.IsInRole(SD.PostmanUser)))
+            {
+                <button type="submit" class="btn btn-outline-success form-control"> Confirm Delivery</button>
+                            }
+                            else
+                            {
+                                <button type="submit" disabled class="btn btn-outline-info form-control">@Model.CustomerOrderHeader.Status</button>
+                                            }
+        </div>
+
+        <div class="col-lg-8 col-12" >
+            <br />
+            <input type="hidden" asp-for="CustomerOrderHeader.Id" />
+            <div class="form-group row">
+                <div class="col-3">
+                    <label>Name</label>
+                </div>
+                <div class="col-9">
+                    <input asp-for="CustomerOrderHeader.PickupName" disabled class="form-control" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-3">
+                    <label asp-for="CustomerOrderHeader.ApplicationUser.Email"></label>
+                </div>
+                <div class="col-9">
+                    <input asp-for="CustomerOrderHeader.ApplicationUser.Email" disabled class="form-control" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-3">
+                    <label asp-for="CustomerOrderHeader.ApplicationUser.PhoneNumber"></label>
+                </div>
+                <div class="col-9">
+                    <input asp-for="CustomerOrderHeader.ApplicationUser.PhoneNumber" disabled class="form-control" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-3">
+                    <label asp-for="CustomerOrderHeader.OrderTotal"></label>
+                </div>
+                <div class="col-9">
+                    <input asp-for="CustomerOrderHeader.OrderTotal" disabled class="form-control" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-3">
+                    <label asp-for="CustomerOrderHeader.OrderDate"></label>
+                </div>
+                <div class="col-9">
+                    <input value="@Model.CustomerOrderHeader.PickUpTime.ToShortDateString() @Model.CustomerOrderHeader.PickUpTime.ToShortTimeString()" disabled class="form-control" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-3">
+                    <label asp-for="CustomerOrderHeader.Comments"></label>
+                </div>
+                <div class="col-9">
+                    <input asp-for="CustomerOrderHeader.Comments" disabled class="form-control" />
+                </div>
+            </div>
+        </div>
+
+    </div>
+</form>

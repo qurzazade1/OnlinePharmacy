@@ -1,0 +1,93 @@
+﻿@model OnlinePharmacy.Models.DiscountCode
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<br />
+<br />
+
+<form method="post" enctype="multipart/form-data">
+    <div class="border backgroundghostWhite">
+
+        <div class=" row" style="margin-bottom:15px;">
+            <div class="col-10 offset-2">
+                <h3 class="text-success">Add DiscountCode</h3>
+
+
+            </div>
+        </div>
+
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group row">
+            <div class="col-2 offset-2">
+                <label asp-for="Name" class="col-form-label"></label>
+            </div>
+            <div class="col-6">
+                <input asp-for="Name" class="form-control" />
+            </div>
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <div class="form-group row">
+            <div class="col-2 offset-2">
+                <label asp-for="Picture" class="col-form-label"></label>
+            </div>
+            <div class="col-6">
+                <input type="file" id="projectImage" name="files" multiple class="form-control" />
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-2 offset-2">
+                <label asp-for="DiscountCodeType" class="col-form-label"></label>
+            </div>
+            <div class="col-6">
+                <select asp-for="DiscountCodeType" asp-items="Html.GetEnumSelectList<DiscountCode.EDiscountCodeType>()" class="form-control"></select>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-2 offset-2">
+                <label asp-for="DiscountAmount" class="col-form-label"></label>
+            </div>
+            <div class="col-6">
+                <input asp-for="DiscountAmount" class="form-control" />
+            </div>
+            <span asp-validation-for="DiscountAmount" class="text-danger"></span>
+        </div>
+        <div class="form-group row">
+            <div class="col-2 offset-2">
+                <label asp-for="MinimumAmount" class="col-form-label"></label>
+            </div>
+            <div class="col-6">
+                <input asp-for="MinimumAmount" class="form-control" />
+            </div>
+            <span asp-validation-for="MinimumAmount" class="text-danger"></span>
+        </div>
+        <div class="form-group row">
+            <div class="col-2 offset-2">
+                <label asp-for="IsActive" class="col-form-label"></label>
+            </div>
+            <div class="col-6">
+                <input type="checkbox" asp-for="IsActive" class="form-control" />
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-6 offset-4">
+
+                <div class="row">
+                    <div class="col-6">
+                        <input type="submit" class="btn btn-outline-info form-control" value="Create" />
+                    </div>
+                    <div class="col-6">
+                        <a asp-action="Index" class="btn btn-outline-success form-control">Back to List</a>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts{
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

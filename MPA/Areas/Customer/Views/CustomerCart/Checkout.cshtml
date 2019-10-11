@@ -1,0 +1,199 @@
+﻿@model OnlinePharmacy.Models.ViewModels.CustomerOrderDetailsCart
+
+@using Microsoft.Extensions.Options
+@inject IOptions<OnlinePharmacy.WebShopUtility.StripeSettings> Stripe
+
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<form method="post">
+    @if (Model.listCart.Count > 0)
+    {
+        <br />
+        <input id="userId" asp-for="@Model.listCart[0].ApplicationUserId" hidden />
+        <div class="backgroundghostWhiteBorder">
+            <div class="container">
+                <div>
+                    <h4 class="text-success"> Customer and Order Details </h4>
+                </div>
+
+                <div class="card rounded">
+
+                    <div class="card-header  bg-white ">
+
+                        <div class="row">
+
+                            <div class="col-6 text-info">
+
+
+                                <a asp-area="Customer" asp-controller="CustomerCart" asp-action="Index"><span class="btn btn-outline-info" style="width:230px;">Back to Shopping Cart</span></a>
+
+
+                            </div>
+                            <div class="col-2 ">
+                                @{
+                                    var OrderTotalForStrip = Model.CustomerOrderHeader.OrderTotal * 100;
+                                }
+                                <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                                        data-key="@Stripe.Value.PublishableKey"
+                                        data-amount="@OrderTotalForStrip"
+                                        data-name="Online Pharmacy"
+                                        data-label="Place Order"
+                                        data-description=""
+                                        data-locale="auto"
+                                        data-allow-remember-me="false"
+                                        data-image="https://stripe.com/img/documentation/checkout/marketplace.png">
+                                </script>
+                                <script>
+                                    document.getElementsByClassName("stripe-button-el")[0].style.display = 'none';
+                                </script>
+
+
+                            </div>
+
+                            <div class="col-4 ">
+
+                                <button type="submit" id="buttonCheckout" onclick="return validateUserInput()" value="Checkout" class="btn btn-outline-success form-control">Checkout</button>
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <div class="card-body">
+                        <div class="container rounded p-2">
+
+
+                            <div class="row">
+                                <div class="col-12 col-lg-6 pb-4">
+
+                                    <div class="row my-1">
+                                        <div class="col-4">
+                                            <label>Name</label>
+                                        </div>
+                                        <div class="col-8">
+                                            <input asp-for="@Model.CustomerOrderHeader.PickupName" id="txtName" type="text" class="form-control" />
+                                        </div>
+                                    </div>
+                                    <div class="row my-1">
+                                        <div class="col-4">
+                                            <label>Phone</label>
+                                        </div>
+                                        <div class="col-8">
+                                            <input asp-for="@Model.CustomerOrderHeader.PhoneNumber" id="txtPhone" type="text" class="form-control" />
+                                        </div>
+                                    </div>
+
+
+
+
+
+                                    <div class="row my-1">
+                                        <div class="col-4">
+                                            <label> Pickup Date</label>
+                                        </div>
+                                        <div class="col-8">
+                                            <input asp-for="@Model.CustomerOrderHeader.PickUpDate" id="textDate" value="" type="text" class="form-control" />
+                                        </div>
+                                    </div>
+
+                                    <div class="row my-1">
+                                        <div class="col-4">
+                                            <label> Pickup Time</label>
+                                        </div>
+                                        <div class="col-8">
+                                            <input asp-for="@Model.CustomerOrderHeader.PickUpTime" id="textTime" value="" type="text" class="form-control" />
+                                        </div>
+                                    </div>
+
+
+
+
+                                    <div class="row my-1">
+                                        <div class="col-4">
+                                            <label> Pickup Address</label>
+                                        </div>
+                                        <div class="col-8">
+                                            <input asp-for="@Model.CustomerOrderHeader.PickUpAddress" id="textPickupAddress" value="" type="text" class="form-control" />
+                                        </div>
+                                    </div>
+
+
+                                    <div class="row my-1">
+                                        <div class="col-4">
+                                            <label>Comments </label>
+                                        </div>
+                                        <div class="col-8">
+                                            <textarea asp-for="@Model.CustomerOrderHeader.Comments" style="height:100px;" class="form-control"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-lg-5 offset-lg-1">
+
+                                    <ul class="list-group mb-3">
+                                        @{ var total = 0.0;}
+                                        @foreach (var details in Model.listCart)
+                                        {
+                                            <li class="list-group-item d-flex justify-content-between">
+                                                <div>
+                                                    <h6 class="my-0">@details.Medicine.Name</h6>
+                                                    <small class="text-muted">Quantity: @details.Count</small>
+                                                </div>
+                                                <span class="text-muted">$@(details.Medicine.Price * details.Count)</span>
+                                                @{ total += (details.Medicine.Price * details.Count); }
+                                            </li>
+                                        }
+                                        @if (Model.CustomerOrderHeader.DiscountCodeString != null)
+                                        {
+                                            <li class="list-group-item d-flex justify-content-between">
+                                                <div class="text-info">
+                                                    <h6 class="my-0">DiscountCode</h6>
+                                                    <small class="text-info">@Model.CustomerOrderHeader.DiscountCodeString</small>
+                                                </div>
+                                                <span class="text-info">-$@(total - Model.CustomerOrderHeader.OrderTotal)</span>
+                                            </li>
+                                        }
+                                        <li class="list-group-item d-flex justify-content-between bg-light">
+                                            <small class="text-info">Total (USD)</small>
+                                            <strong class="text-info">$@(Model.CustomerOrderHeader.OrderTotal)</strong>
+                                        </li>
+                                    </ul>
+                                </div>
+
+
+
+
+                            </div>
+
+
+
+
+                    
+
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+
+
+                </div>
+           
+    }
+    else
+    {
+        <div class="backgroundghostWhiteBorder"> No items added to the shopping cart...</div>
+    }
+</form>
+
+@section Scripts{
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.10.0/jquery.timepicker.js"></script>
+
+    <script src="~/js/Checkout.js">
+
+    </script>
+}

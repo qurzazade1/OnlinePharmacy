@@ -1,0 +1,211 @@
+﻿
+@using OnlinePharmacy.WebShopUtility
+
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - OnlinePharmacy</title>
+
+    <environment include="Development">
+        <script src="https://cloud.tinymce.com/stable/tinymce.min.js?apiKey=n94ifuzvl80pchikopiwgz2esrw8n28dwcywvpejlqrregfp"></script>
+        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+        <link rel="stylesheet" href="~/css/jquery-ui.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.10.0/jquery.timepicker.css" />
+        <link href="~/Scripts/dropzone.min.css" rel="stylesheet" />
+        <script src="~/js/dropzone/dropzone.js"></script>
+        <script src="~/Scripts/dropzone.min.js"></script>
+        <link href="~/js/dropzone/dropzone.css" rel="stylesheet" />
+    </environment>
+    <environment exclude="Development">
+        <script src="https://cloud.tinymce.com/stable/tinymce.min.js?apiKey=n94ifuzvl80pchikopiwgz2esrw8n28dwcywvpejlqrregfp"></script>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+              asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
+              asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute"
+              crossorigin="anonymous"
+              integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" />
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+        <link rel="stylesheet" href="~/css/jquery-ui.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.10.0/jquery.timepicker.css" />
+
+        <link href="~/Scripts/dropzone.min.css" rel="stylesheet" />
+        <script src="~/js/dropzone/dropzone.js"></script>
+        <script src="~/Scripts/dropzone.min.js"></script>
+        <link href="~/js/dropzone/dropzone.css" rel="stylesheet" />
+    </environment>
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link href="~/Scripts/dropzone.min.css" rel="stylesheet" />
+    <script src="~/js/dropzone/dropzone.js"></script>
+    <script src="~/Scripts/dropzone.min.js"></script>
+    <link href="~/js/dropzone/dropzone.css" rel="stylesheet" />
+</head>
+<body class="search-background">
+    <header>
+        <nav  style="background-color:seagreen;font-size:20px; height:50px;"  class="navbar active navbar-expand-sm navbar-toggleable-sm  navbar-dark text-dark border-bottom box-shadow mb-3">
+            <div class="container">
+
+
+                <a class="navbar-brand" asp-area="Customer" asp-controller="Home" asp-action="Index">OnlinePharmacy</a>
+                
+
+
+
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                    <partial name="_LoginPartial" />
+                    <ul class="navbar-nav flex-grow-1">
+
+                        @if (HttpContextAccessor.HttpContext.Session.GetInt32(@SD.ssCustomerShoppingCartCount) != null)
+                        {
+                            <li style="color:white; font-size:20px; margin-top:8px; color:white;" class="active">
+
+                                <a asp-area="Customer" asp-controller="CustomerCart" asp-action="Index" class="nav-link">
+
+
+
+                                    @{
+                                        var count = HttpContextAccessor.HttpContext.Session.GetInt32(@SD.ssCustomerShoppingCartCount);
+
+                                    }
+                                    <i class="fas fa-shopping-cart"></i> &nbsp; (@count)
+                                </a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li style="color:white;margin-top:8px;">
+                                <a href="#" class="nav-link">
+                                    <i class="fas fa-shopping-cart"></i> &nbsp; (0)
+                                </a>
+                            </li>
+                        }
+
+                        @if (User.IsInRole(SD.ManagerUser))
+                        {
+                            <li class="nav-item dropdown text-white active" style="font-size:20px;">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropDownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                    Administrator Privledges
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropDownMenuLink">
+                                    <a class="dropdown-item" asp-action="Index" asp-controller="MedicineType" asp-area="Admin">Medicine Type</a>
+                                    <a class="dropdown-item" asp-action="Index" asp-controller="MedicineSubtype" asp-area="Admin">Medicine Subtype</a>
+                                    <a class="dropdown-item" asp-action="Index" asp-controller="Medicine" asp-area="Admin">Medicine</a>
+                                    <a class="dropdown-item" asp-action="Index" asp-controller="Discount" asp-area="Admin">Discounts</a>
+                                    <a class="dropdown-item" asp-action="Index" asp-controller="User" asp-area="Admin">Users</a>
+                                    <a class="dropdown-item" asp-action="PrepareOrder" asp-controller="CustomerOrder" asp-area="Customer">Prepare Order</a>
+                                    <a class="dropdown-item" asp-action="OrderDelivery" asp-controller="CustomerOrder" asp-area="Customer">Order Delivery</a>
+                                    <a class="dropdown-item" asp-action="OrderHistory" asp-controller="CustomerOrder" asp-area="Customer">
+                                        Order History
+                                    </a>
+                                    <a class="dropdown-item" asp-action="AllOrdersHistory" asp-controller="AllOrders" asp-area="Admin">
+                                        All Orders
+                                    </a>
+                                </div>
+                            </li>
+
+
+
+                        }
+
+
+                        @if (User.IsInRole(SD.PostmanUser) || User.IsInRole(SD.PharmacistUser))
+                        {
+
+
+                            @if (User.IsInRole(SD.PharmacistUser))
+                            {
+
+
+                                <li class="nav-item active" style="color:wheat;margin:8px;">
+
+                                    <a  asp-action="PrepareOrder" asp-controller="CustomerOrder" class=" text-white nav-link" asp-area="Customer">Prepare Order</a>
+
+                                  </li>
+
+
+                                    }
+                                    @if (User.IsInRole(SD.PostmanUser))
+                                    {
+
+
+                                    <li class="nav-item active" style="margin-top:7px;">
+                                        <a asp-action="OrderDelivery" asp-controller="CustomerOrder" asp-area="Customer" class="nav-link">Order Delivery</a>
+                                    </li>
+
+
+
+
+                                }
+
+
+                                    }
+
+
+                                    @if (User.IsInRole(SD.CustomerEndUser) || User.IsInRole(SD.PostmanUser) || User.IsInRole(SD.PharmacistUser))
+                                    {
+                                        <li class="nav-item active" style="margin-top:8px;">
+                                            <a asp-area="Customer" asp-controller="CustomerOrder" asp-action="OrderHistory" class="nav-link">
+                                                MyOrder History
+                                            </a>
+                                        </li>
+                                    }
+
+
+
+
+
+                                </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <partial name="_CookieConsentPartial" />
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top pl-3 footer text-white-50" style="background-color: seagreen;height:50px;">
+        <div class="container">
+            &copy; 2019 - OnlinePharmacy
+        </div>
+    </footer>
+
+    <environment include="Development">
+        <script src="~/lib/jquery/dist/jquery.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.js"></script>
+        <script src="~/js/jquery-ui.js"></script>
+
+    </environment>
+    <environment exclude="Development">
+        <script src="~/js/jquery-ui.js"></script>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"
+                asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
+                asp-fallback-test="window.jQuery"
+                crossorigin="anonymous"
+                integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=">
+        </script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"
+                asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"
+                asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal"
+                crossorigin="anonymous"
+                integrity="sha384-xrRywqdh3PHs8keKZN+8zzc5TX0GRTLCcmivcbNJWm2rs5C8PRhcEn3czEjhAO9o">
+        </script>
+    </environment>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

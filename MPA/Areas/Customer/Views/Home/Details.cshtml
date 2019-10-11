@@ -1,0 +1,143 @@
+﻿@model OnlinePharmacy.Models.CustomerShoppingCart
+@using OnlinePharmacy.WebShopUtility
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<form method="post" asp-action="Details">
+
+
+    
+    <div class="border backgroundghostWhite" style="margin-top:29px;">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+ 
+        
+
+        <div class="row">
+
+
+            <div class="col-10">
+                <h3 class="text-success"> Medicine Details</h3>
+            </div>
+            <div class="col-2 ">
+                <a asp-action="Index" class=" btn btn-outline-info form-control">Back to List</a>
+            </div>
+            
+            &nbsp;
+
+            <div class="col-12 pb-4 d-md-none">
+                <img src="@Model.Medicine.Image" width="100%" style="border-radius:5px;border: 1px solid #bbb9b9;" />
+            </div>
+            <div class="col-md-3 d-none d-md-block" style="margin-top:15px;">
+                <img src="@Model.Medicine.Image" width="100%" style="border-radius:5px;border: 1px solid #bbb9b9;" />
+            </div>
+
+
+            <div class="col-md-8" style="margin-top:15px;">
+                <div class="form-group row">
+                    <div class="col-md-4">
+                        <label asp-for="Medicine.Name" ></label>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="border p-2 rounded">
+                            @Html.Raw(Model.Medicine.Name)
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-4">
+                        <label asp-for="Medicine.Description" ></label>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="border p-2 rounded">
+                            @Html.Raw(Model.Medicine.Description)
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-4">
+                        <label asp-for="Medicine.Price" ></label>
+                    </div>
+                    <div class="col-md-8">
+
+                        <div class="border p-2 rounded ">
+                            @Html.Raw(Model.Medicine.Price)
+                        </div>
+
+
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-4">
+                        <label asp-for="Medicine.MedicineTypeId" ></label>
+                    </div>
+                    <div class="col-md-8">
+
+                        <div class="border p-2 rounded ">
+                            @Html.Raw(Model.Medicine.MedicineType.Name)
+                        </div>
+
+
+
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-4">
+                        <label asp-for="Medicine.MedicineSubtypeId" ></label>
+                    </div>
+                    <div class="col-md-8">
+
+                        <div class="border p-2 rounded ">
+                            @Html.Raw(Model.Medicine.MedicineSubtype.Name)
+                        </div>
+
+
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-4">
+                        <label asp-for="Medicine.Country" ></label>
+                    </div>
+                    <div class="col-md-8">
+                        <select asp-for="Medicine.Country" disabled asp-items="Html.GetEnumSelectList<Medicine.ECountry>()" class="form-control"></select>
+
+
+
+
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-4">
+                        <label asp-for="Count" ></label>
+                    </div>
+                    <div class="col-md-8">
+                        <input class="border p-2 rounded form-control " style=" width:100%" asp-for="Count"  />
+
+                        <span asp-validation-for="Count" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-4">
+                    </div>
+                    <div class="col-md-8">
+                        <button type="submit" value="Add to Cart" class="btn btn-outline-success form-control">Add to Shopping Cart</button>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+        </div>
+
+    
+    <input asp-for="MedicineId" hidden />
+</form>
+
+@section Scripts{
+    
+
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,137 @@
+﻿@model OnlinePharmacy.Models.ViewModels.MedicineTypeandMedicineSubtypeViewModel
+@using OnlinePharmacy.WebShopUtility.WebShopExtension
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<br />
+
+
+<br />
+
+
+
+@if (!String.IsNullOrEmpty(Model.StatusMessage))
+{
+    var statusMessageClass = Model.StatusMessage.StartsWith("Error") ? "danger" : "success";
+    <div class="alert alert-@statusMessageClass alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        @Model
+    </div>
+}
+
+
+
+
+
+
+    <div class="border backgroundghostWhite row" style="" >
+
+        <div class="row col-12" style="padding:10px;padding-left:15px;">
+             <div class="col-7">
+            <h3 class="text-success">Add new  MedicineSubtype</h3>
+                 </div>
+
+            <div class="col-5 text-success"> 
+            <h3> Existing Subtypes</h3>
+                </div>
+        </div>
+
+
+
+        <div class="col-7 border-right">
+
+
+
+            <form asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+
+
+                <div class="form-group row">
+                    <div class="col-5">
+                        <label asp-for="MedicineSubtype.MedicineTypeId" class="col-form-label"></label>
+                    </div>
+                    <div class="col-6">
+                        <select id="ddlMedicineTypelist" asp-for="MedicineSubtype.MedicineTypeId" asp-items="Model.MedicineTypeList.ToSelectListItem(Model.MedicineSubtype.MedicineTypeId)" class="form-control"></select>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-5">
+                        <label asp-for="MedicineSubtype.Name" class="col-form-label"></label>
+                    </div>
+                    <div class="col-6">
+                        <input asp-for="MedicineSubtype.Name" class="form-control" />
+                    </div>
+                    <span asp-validation-for="MedicineSubtype.Name" class="text-danger"></span>
+                </div>
+                <div class="form-group row">
+                    <div class="col-6 offset-5">
+
+                        <div class="row">
+                            <div class="col-6">
+                                <input type="submit" class="btn btn-outline-info form-control" value="Create" />
+                            </div>
+                            <div class="col-6">
+                                <a asp-action="Index" class="btn btn-outline-success form-control">Back to List</a>
+                            </div>
+                        </div>
+
+
+
+
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="col-3">
+            @if (Model.MedicineSubtypeList.Count() > 0)
+            {
+
+                <div id="MedicineSubtypeList">
+                    <ul class="list-group"></ul>
+                </div>
+            }
+        </div>
+
+
+    </div>
+@section Scripts{
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+
+        function updateMedicineSubtypeList() {
+            var MedicineTypeSelected = document.getElementById("ddlMedicineTypelist").value;
+
+            $list = $('#MedicineSubtypeList');
+
+            $.ajax({
+                url: '/Admin/MedicineSubtype/GetMedicineSubtype/' + MedicineTypeSelected,
+                type: 'GET',
+                dataType: 'text',
+                success: function (data) {
+                    results = JSON.parse(data);
+                    $list.html('');
+                    $list.append(' <ul class="list-group"> ');
+                    for (i in results) {
+                        $list.append('<li class="list-group-item">' + results[i].text + '</li>');
+                    }
+                    $list.append('</ul>');
+                }
+
+            });
+
+        }
+
+        $(document).ready(function () {
+            updateMedicineSubtypeList();
+        });
+
+        $("#ddlMedicineTypelist").on("change", function () {
+            updateMedicineSubtypeList();
+        });
+
+
+    </script>
+
+}

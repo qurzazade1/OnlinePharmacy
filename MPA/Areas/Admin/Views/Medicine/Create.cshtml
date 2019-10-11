@@ -1,0 +1,196 @@
+﻿@model OnlinePharmacy.Models.ViewModels.MedicineViewModel
+
+@using OnlinePharmacy.WebShopUtility.WebShopExtension
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var k = 2002;
+   // Medicine.Id = "2002";
+}
+
+<br />
+
+
+
+
+<form method="post"  asp-action="Create" enctype="multipart/form-data">
+
+    
+
+
+    <div class="border backgroundghostWhite">
+
+        <div class="row">
+            <div class="col-6">
+                <h2 class="text-success" style="">Add  new  medicine</h2>
+            </div>
+
+            <div class="col-3 offset-3">
+                <a asp-action="Index" class="btn btn-outline-info form-control">Back to List</a>
+            </div>
+        </div>
+
+
+
+
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group row" style="margin-top:15px;">
+            <div class="col-3 offset-1">
+                <label asp-for="Medicine.Name" class="col-form-label"></label>
+            </div>
+            <div class="col-5">
+                <input asp-for="Medicine.Name" class="form-control" />
+            </div>
+            <span asp-validation-for="Medicine.Name" class="text-danger"></span>
+        </div>
+
+
+        <div class="form-group row">
+            <div class="col-3 offset-1">
+                <label asp-for="Medicine.Image" class="col-form-label"></label>
+            </div>
+            <div class="col-5" style="">
+
+
+                <input type="file" name="files" multiple class="form-control" />
+
+            </div>
+
+
+        </div>
+
+
+
+        <div class="form-group row">
+            <div class="col-3 offset-1">
+                <label asp-for="Medicine.Price" class="col-form-label"></label>
+            </div>
+            <div class="col-5">
+                <input asp-for="Medicine.Price" class="form-control" />
+            </div>
+            <span asp-validation-for="Medicine.Price" class="text-danger"></span>
+        </div>
+
+
+
+
+
+        <div class="form-group row">
+            <div class="col-3 offset-1">
+                <label asp-for="Medicine.Description" class="col-form-label"></label>
+            </div>
+            <div class="col-5">
+                @Html.TextAreaFor(m => m.Medicine.Description)
+            </div>
+            <span asp-validation-for="Medicine.Description" class="text-danger"></span>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-3 offset-1">
+                <label asp-for="Medicine.MedicineTypeId" class="col-form-label"></label>
+            </div>
+            <div class="col-5">
+
+                <select asp-for="@Model.Medicine.MedicineTypeId" id="MedicineTypeId" asp-items="Model.MedicineType.ToSelectListItem(Model.Medicine.MedicineTypeId)" class="form-control"></select>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-3 offset-1">
+                <label asp-for="Medicine.MedicineSubtypeId" class="col-form-label"></label>
+            </div>
+            <div class="col-5">
+                <select asp-for="@Model.Medicine.MedicineSubtypeId" name="MedicineSubtypeId" id="MedicineSubtypeId" asp-items="@(new SelectList(string.Empty,"Id","Name"))" class="form-control"></select>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-3 offset-1">
+                <label asp-for="Medicine.Country" class="col-form-label"></label>
+            </div>
+            <div class="col-5">
+                <select asp-for="Medicine.Country" asp-items="Html.GetEnumSelectList<Medicine.ECountry>()" class="form-control"></select>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-5 offset-4">
+
+                <div class="row">
+                    <div class="col-12">
+                        <input type="submit" class="btn btn-outline-success form-control" value="Create" />
+                    </div>
+
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</form>
+
+
+
+
+
+
+@section Scripts{
+    <script>
+        tinymce.init({
+            selector: 'textarea',
+            plugins: "lists",
+            menubar: 'file edit format'
+        });
+    </script>
+
+
+
+    <script>
+        Dropzone.options.mydz = {
+            autoProcessQueue: false,
+            uploadMultiple: false,
+            parallelUploads: 1,
+            maxFiles: 1,
+            previewsContainer: "#showhere",
+            clickable: "#showhere",
+            dictDefaultMessage: "",
+          //  init: function () {
+             //   this.on('addedfile', function (file) {
+               //     if (this.files.length > 1) {
+                 //       this.removeFile(this.files[0]);
+                   // }
+                //});
+           // }
+        }
+    </script>
+
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            getMedicineSubtype();
+            $('#MedicineTypeId').change(function () {
+                getMedicineSubtype();
+            });
+        });
+
+
+        function getMedicineSubtype() {
+            var url = '@Url.Content("~/")' + "Admin/MedicineSubtype/GetMedicineSubtype";
+            var ddlsoruce = '#MedicineTypeId';
+            $.getJSON(url, { id: $(ddlsoruce).val() }, function (data) {
+                var items = '';
+                $('#MedicineSubtypeId').empty();
+                $.each(data, function (i, medicineSubtype) {
+                    items += "<option value='" + medicineSubtype.value + "'>" + medicineSubtype.text + "</option>";
+                });
+
+                $('#MedicineSubtypeId').html(items);
+            })
+        }
+    </script>
+
+
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+
+
+}

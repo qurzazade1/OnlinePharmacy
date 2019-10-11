@@ -1,0 +1,114 @@
+﻿@model OnlinePharmacy.Models.ViewModels.CustomerOrderListViewModel
+@using OnlinePharmacy.WebShopUtility
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<br /><br />
+
+<div class="modal fade" id="myOrderDetailsModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog-centered modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-light justify-content-lg-start">
+              <div class="col-8"><h5 class="modal-title">Order Details</h5></div>
+              <div class="col-2 offset-2">
+                  <button type="button" class="btn btn-success " style="width:100%" data-dismiss="modal">Close</button>
+              </div>
+                
+            </div>
+            <div class="modal-body justify-content-center" id="myOrderDetailsModalContent">
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="border backgroundghostWhite">
+    <div class="row">
+        <div class="col-6">
+            <h2 class="text-success"> Order History</h2>
+        </div>
+        <div class="col-6 text-right">
+
+
+        </div>
+    </div>
+    <br />
+    <div>
+        @if (Model.Orders.Count() > 0)
+        {
+            <table class="table  border">
+                <tr class="table-success">
+                    <th>
+                        @Html.DisplayNameFor(m => m.Orders[0].CustomerOrderHeader.Id)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(m => m.Orders[0].CustomerOrderHeader.PickupName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(m => m.Orders[0].CustomerOrderHeader.ApplicationUser.Email)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(m => m.Orders[0].CustomerOrderHeader.PickUpTime)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(m => m.Orders[0].CustomerOrderHeader.OrderTotal)
+                    </th>
+                    <th>
+                        Total Items
+                    </th>
+                    <th></th>
+                </tr>
+                @foreach (var item in Model.Orders)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(m => item.CustomerOrderHeader.Id)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(m => item.CustomerOrderHeader.PickupName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(m => item.CustomerOrderHeader.ApplicationUser.Email)
+                  
+                        </td>
+                        <td>
+                            @Html.DisplayFor(m => item.CustomerOrderHeader.PickUpTime)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(m => item.CustomerOrderHeader.OrderTotal)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(m => item.CustomerOrderDetails.Count)
+                        </td>
+                        <td>
+                            <button type="submit" class="btn btn-outline-success anchorDetail" data-id="@item.CustomerOrderHeader.Id" data-toggle="modal">
+                                
+                                <i class="fas fa-info"> </i>
+                            </button>
+                        </td>
+                    </tr>
+                }
+            </table>
+            <div page-model="@Model.PagingInfo" page-classes-enabled="true" page-class="btn border"
+                 page-class-normal="btn btn-light" page-class-selected="btn btn-info active"
+                 class="btn-group float-right">
+            </div>
+            <br />
+        }
+        else
+        {
+            <p>You do not have any order...</p>
+        }
+    </div>
+</div>
+
+
+@section scripts
+    {
+    <script src="~/js/GetCustomerOrderDetails.js">
+
+    </script>
+}

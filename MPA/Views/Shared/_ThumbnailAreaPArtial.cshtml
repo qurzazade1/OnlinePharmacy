@@ -1,0 +1,61 @@
+﻿@model IEnumerable<Medicine>
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+@if (Model.Count() >= 1)
+    
+{
+    <div class="col-12 post  @Model.FirstOrDefault().MedicineType.Name.Replace(" ",string.Empty) medicine-pharmacy">
+        <div class="row border" style="background-color:seagreen;margin-left:16px;height:44px;padding-top:5px;">
+            <div class="col-8 offset-4">
+                <h4 class="text-white"> @Model.FirstOrDefault().MedicineType.Name.ToUpper() </h4>
+       </div>
+            </div>
+
+        @foreach(var item in Model)
+        {
+            <div class="   border backgroundghostWhite " style=" margin-left:30px; border-radius:1px;  margin-bottom:2px; margin-top:2px; padding:5px">
+                <div class="row" style="">
+                   
+                    <div class="col-md-3 col-sm-12" style="padding-left:10px;">
+                        <img src="@item.Image"  style="border-radius:6px;border:1px solid #bbb9b9; height:170px;width:170px;" />
+                    </div>
+
+                    <div class="col-md-9 col-sm-12" style="padding-left:25px;">
+                        <div class="row pr-3">
+                            <div class="col-8">
+                                <label class="text-primary" style="font-size:21px;">@item.Name</label>
+                                @if (item.Country == "1")
+                                {
+                                    <img style="position:relative;height:25px; width:25px;" srcset="/images/AzerbaijanFlag.png" title="Azerbaijan" />
+                                }
+                                @if (item.Country == "2")
+                                {
+                                    <img style="position:relative;height:25px; width:25px;" srcset="/images/HungaryFlag.jpg" title="Hungary" />
+                                }
+                                @if (item.Country == "3")
+                                {
+                                    <img style="position:relative;height:25px; width:25px;" srcset="/images/IsraelFlagEmoji.png" title="Israel" />
+                                }
+                            </div>
+                            <div class="col-md-2  text-right">
+                                <h4>$@item.Price</h4>
+                            </div>
+                            <div class="col-2  text-right">
+                                <a asp-action="Details" class="btn btn-outline-success form-control" asp-route-id="@item.Id">  <i class="fas fa-info"> </i></a>
+
+                            </div>
+                        </div>
+
+                        <div class="row col-12 text-justify d-none d-md-block">
+                            <p>@Html.Raw(item.Description)</p>
+                        </div>
+                    
+                    </div>
+                    </div>
+                </div> 
+        }
+        <div class="p-4"></div>
+    </div>
+}

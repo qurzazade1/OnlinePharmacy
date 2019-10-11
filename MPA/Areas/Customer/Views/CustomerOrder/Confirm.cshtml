@@ -1,0 +1,32 @@
+﻿@model OnlinePharmacy.Models.ViewModels.CustomerOrderDetailsViewModel
+@{
+    ViewData["Title"] = "Confirm";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<br />
+<div class="">
+    <div class="row px-3">
+        <div class="col-8">
+            <h2 class="text-success">Order Confirmed</h2>
+        </div>
+        <div class="col-4 text-right">
+            <a asp-action="Index" asp-controller="Home" class="btn btn-outline-success form-control">New Order</a>
+        </div>
+    </div>
+
+    @if(Model.CustomerOrderHeader !=null)
+    {
+        <div  class="p-3 text-success">
+           <h5> Your order has been confirmed! Please see the order summary below. 
+            
+         </h5>
+        </div>
+        <partial name="_IndividualCustomerOrderDetails" model="Model" />
+    }
+    else
+    {
+        <div class="text-danger">Error... Please try again.</div>
+    }
+</div>
+

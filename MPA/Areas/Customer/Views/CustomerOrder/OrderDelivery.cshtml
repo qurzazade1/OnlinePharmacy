@@ -1,0 +1,164 @@
+﻿@model OnlinePharmacy.Models.ViewModels.CustomerOrderListViewModel
+@using OnlinePharmacy.WebShopUtility
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="modal fade" id="myOrderDetailsModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog-centered modal-dialog" role="document">
+        <div class="modal-content">
+
+                <div class="modal-header bg-success text-light justify-content-lg-start">
+                    <div class="col-8"><h5 class="modal-title">Order Details</h5></div>
+                    <div class="col-2 offset-2">
+                        <button type="button" class="btn btn-success " style="width:100%" data-dismiss="modal">Close</button>
+                    </div>
+
+                </div>
+
+
+            <div class="modal-body justify-content-md-start" id="myOrderDetailsModalContent">
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+<form method="get">
+    <br />
+
+
+
+
+    
+
+        <div class="row" style="padding-top:12px">
+
+            <div class="col-12">
+
+            <h3 class="text-success"> Orders Ready for Delivery  </h3>
+       
+
+       
+                </div
+>
+        </div>
+
+
+
+    
+
+    <div class="border backgroundghostWhite col-12">
+
+
+        <div class="container  col-4 offset-8" style="height:55px;">
+
+            <div class="row container ">
+                <div class="col-8  ">
+                    <div class="row" style="padding-top:10px">
+
+
+                        @Html.Editor("searchName", new { htmlAttributes = new { @class = "form-control", @placeholder = "Name..." } })
+
+
+                    </div>
+                </div>
+                <div class="col-3 offset-1">
+                    <div class="row" style="padding-top:10px;">
+                        <button type="submit" name="submit" value="Search" class="btn btn-outline-success form-control">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <br />
+        <div>
+            @if (Model.Orders.Count() <= 0)
+            {<p>Nothing for delivery...</p>
+            }
+            else
+            {
+
+                <table class="table  border">
+                    <tr class="table-success">
+                        <th>
+                            @Html.DisplayNameFor(m => m.Orders[0].CustomerOrderHeader.Id)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(m => m.Orders[0].CustomerOrderHeader.PickupName)
+                        </th>
+
+                        <th>
+                            @Html.DisplayNameFor(m => m.Orders[0].CustomerOrderHeader.PickUpTime)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(m => m.Orders[0].CustomerOrderHeader.ApplicationUser.Email)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(m => m.Orders[0].CustomerOrderHeader.PickUpAddress)
+                        </th>
+                        <th>
+                            Total Items
+                        </th>
+                        <th></th>
+                    </tr>
+                    @foreach (var item in Model.Orders)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(m => item.CustomerOrderHeader.Id)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(m => item.CustomerOrderHeader.PickupName)
+                            </td>
+
+                            <td>
+                                @Html.DisplayFor(m => item.CustomerOrderHeader.PickUpTime)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(m => item.CustomerOrderHeader.ApplicationUser.Email)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(m => item.CustomerOrderHeader.PickUpAddress)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(m => item.CustomerOrderDetails.Count)
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-outline-success anchorDetail" data-id="@item.CustomerOrderHeader.Id" data-toggle="modal">
+                                    <i class="fas fa-info"> </i>
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                </table>
+
+                <div page-model="@Model.PagingInfo" page-classes-enabled="true" page-class="btn border"
+                     page-class-normal="btn btn-light" page-class-selected="btn btn-info active"
+                     class="btn-group float-right">
+                </div>
+
+                <br />
+            }
+        </div>
+
+
+    </div>
+</form>
+
+
+
+
+@section scripts
+    {
+    <script src="~/js/GetCustomerOrderDetails.js">
+
+    </script>
+}
